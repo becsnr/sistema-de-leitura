@@ -2,8 +2,7 @@ const bookInput = document.getElementById('book');
 const addBook = document.getElementById('add-book');
 const divBooks = document.getElementById('list-books');
 const card = document.querySelectorAll('.card');
-const titleBook = document.querySelectorAll('.tilte-book');
-const autorBook = document.querySelectorAll('.autor-book');
+
 
 addBook.addEventListener("click", () => {
     let book = bookInput.value;
@@ -12,8 +11,14 @@ addBook.addEventListener("click", () => {
     const newCard = document.createElement('div');
     newCard.className = 'card';
 
+    // criar h2
+    const titleBook = document.createElement('h2');
+    titleBook.className = 'title-book';
+    titleBook.textContent = book;
 
-    // newCard.classList.add('title-book', 'autor-book');
-    
-    // newCard.innerHTML= `<h2 .title-book>${book}<h2>`;
+    // coloca o h2 dentro do card
+    newCard.appendChild(titleBook);
+
+    // coloca o card dentro da div
+    divBooks.appendChild(newCard);
 });
