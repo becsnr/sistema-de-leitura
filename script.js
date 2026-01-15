@@ -21,7 +21,7 @@ addBook.addEventListener("click", () => {
 function criarCards() {
     divBooks.innerHTML = "";
 
-    storedBooks.forEach(book => {
+    storedBooks.forEach((book, indice) => {
         // criar o card
         const newCard = document.createElement('div');
         newCard.className = 'card';
@@ -31,19 +31,32 @@ function criarCards() {
         titleBook.className = 'title-book';
         titleBook.textContent = book.title;
 
-        // criar botoes
-        const concluir = document.createElement('button');
-        concluir.className = 'button-card finish';
-        concluir.textContent = 'Concluir Leitura';
+        // botoes
+        const concluirBtn = document.createElement('button');
+        concluirBtn.className = 'button-card finish';
+        concluirBtn.textContent = 'Concluir Leitura';
 
-        const remove = document.createElement('button');
-        remove.className = 'button-card remove';
-        remove.textContent = 'Remover';
+        concluirBtn.addEventListener("click", () => {
+            storedBooks[indice].read = true;
+            criarCards();
+            
+        });
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'button-card remove';
+        removeBtn.textContent = 'Remover';
+
+        if (book.read) {
+            newCard.style.background = '#d5f2d9a8';
+
+            concluirBtn.style.display = 'none';
+            removeBtn.style.display = 'none';
+        };
 
         // coloca o h2 e botoes dentro do card
         newCard.appendChild(titleBook);
-        newCard.appendChild(concluir);
-        newCard.appendChild(remove);
+        newCard.appendChild(concluirBtn);
+        newCard.appendChild(removeBtn);
 
         // coloca o card dentro da div
         divBooks.appendChild(newCard);
