@@ -31,8 +31,19 @@ function criarCards() {
         titleBook.className = 'title-book';
         titleBook.textContent = book.title;
 
-        // coloca o h2 dentro do card
+        // criar botoes
+        const concluir = document.createElement('button');
+        concluir.className = 'button-card finish';
+        concluir.textContent = 'Concluir Leitura';
+
+        const remove = document.createElement('button');
+        remove.className = 'button-card remove';
+        remove.textContent = 'Remover';
+
+        // coloca o h2 e botoes dentro do card
         newCard.appendChild(titleBook);
+        newCard.appendChild(concluir);
+        newCard.appendChild(remove);
 
         // coloca o card dentro da div
         divBooks.appendChild(newCard);
