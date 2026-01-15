@@ -45,7 +45,6 @@ button#add-book:hover {
 /* CARDS */
 div#list-books {
     background-color: #ebd3b4b7;
-    padding: 10px;
     margin-top: 10px;
     width: 300px;
     border-radius: 10px;
@@ -56,6 +55,7 @@ div#list-books div.card {
     padding: 10px;
     box-shadow: 1px 1px 10px #2f1c0343;
     border-radius: 5px;
+    margin: 10px;
 }
 
 div#list-books h2 {
@@ -68,7 +68,6 @@ div#list-books p {
 }
 
 div#list-books .button-card {
-    /* background-color: #c2a7834f; */
     border: none;
     border-radius: 5px;
     box-shadow: 1px 1px 1px #0f0f0e43;
@@ -78,6 +77,7 @@ div#list-books .button-card {
 
 div#list-books .finish {
     background-color: #c7f2cc5f;
+    margin-right: 5px;
 }
 div#list-books .finish:hover {
     background-color: #83c28a5f;
