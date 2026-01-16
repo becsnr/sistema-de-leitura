@@ -1,12 +1,12 @@
 const bookInput = document.getElementById('book');
 const addBook = document.getElementById('add-book');
 const divBooks = document.getElementById('list-books');
-const card = document.querySelectorAll('.card');
 
 let storedBooks = [];
 
 addBook.addEventListener("click", () => {
     let book = bookInput.value;
+    bookInput.value = "";
 
     const dadosBook = {
         title: book, 
@@ -45,6 +45,11 @@ function criarCards() {
         const removeBtn = document.createElement('button');
         removeBtn.className = 'button-card remove';
         removeBtn.textContent = 'Remover';
+
+        removeBtn.addEventListener("click", () => {
+            storedBooks.splice(indice, 1);
+            criarCards();
+        });
 
         if (book.read) {
             newCard.style.background = '#d5f2d9a8';
