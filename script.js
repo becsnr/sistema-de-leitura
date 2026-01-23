@@ -9,15 +9,27 @@ addBook.addEventListener("click", () => {
     let book = bookInput.value;
     bookInput.value = "";
 
+    
+
     const dadosBook = {
         title: book, 
+        autor: '',
         read: false
     };
-    storedBooks.push(dadosBook);
-    localStorage.setItem("dados", JSON.stringify(storedBooks));
 
-    renderizar();
-    console.log(storedBooks);
+    fetch(`https://openlibrary.org/search.json?q=${book}`)
+        .then(res => res.json())
+        .then(dados => {
+            dadosBook.autor = dados.docs?.[0]?.author_name?.[0] || "Autor desconhecido";
+
+            storedBooks.push(dadosBook);
+            localStorage.setItem("dados", JSON.stringify(storedBooks));
+
+            renderizar();
+            console.log(storedBooks);
+        })
+
+    
 });
 
 function criarCards(book, indice) {
@@ -29,6 +41,11 @@ function criarCards(book, indice) {
     const titleBook = document.createElement('h2');
     titleBook.className = 'title-book';
     titleBook.textContent = book.title;
+
+    // autor
+    const autorBook = document.createElement('p');
+    autorBook.className = 'autor-book';
+    autorBook.textContent = book.autor;
 
     // botoes
     const concluirBtn = document.createElement('button');
@@ -60,6 +77,7 @@ function criarCards(book, indice) {
 
     // coloca o h2 e botoes dentro do card
     newCard.appendChild(titleBook);
+    newCard.appendChild(autorBook);
     newCard.appendChild(concluirBtn);
     newCard.appendChild(removeBtn);
 
