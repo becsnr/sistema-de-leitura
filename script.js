@@ -9,27 +9,28 @@ addBook.addEventListener("click", () => {
     let book = bookInput.value;
     bookInput.value = "";
 
-    
-
     const dadosBook = {
         title: book, 
         autor: '',
+        capa: '',
         read: false
     };
 
     fetch(`https://openlibrary.org/search.json?q=${book}`)
         .then(res => res.json())
         .then(dados => {
-            dadosBook.autor = dados.docs?.[0]?.author_name?.[0] || "Autor desconhecido";
+            const bookAPI = dados.docs?.[0];
+
+            dadosBook.autor = bookAPI?.author_name?.[0] || "Autor desconhecido";
+
+            dadosBook.capa = bookAPI?.cover_i ? `https://covers.openlibrary.org/b/id/${bookAPI.cover_i}-M.jpg` : null;
 
             storedBooks.push(dadosBook);
             localStorage.setItem("dados", JSON.stringify(storedBooks));
 
             renderizar();
             console.log(storedBooks);
-        })
-
-    
+        });
 });
 
 function criarCards(book, indice) {
@@ -47,6 +48,17 @@ function criarCards(book, indice) {
     autorBook.className = 'autor-book';
     autorBook.textContent = book.autor;
 
+    // capa
+    const capaBook = document.createElement('img');
+    capaBook.className = 'capa';
+
+    if (book.capa) {
+        capaBook.src = book.capa;
+        capaBook.alt = `Capa do livro ${book.title}`;
+    } else {
+        capaBook.alt = "Capa indisponível";
+    }
+    
     // botoes
     const concluirBtn = document.createElement('button');
     concluirBtn.className = 'button-card finish';
@@ -75,7 +87,8 @@ function criarCards(book, indice) {
         removeBtn.style.display = 'none';
     };
 
-    // coloca o h2 e botoes dentro do card
+    // coloca os novos elementos dentro do card
+    newCard.appendChild(capaBook);
     newCard.appendChild(titleBook);
     newCard.appendChild(autorBook);
     newCard.appendChild(concluirBtn);
