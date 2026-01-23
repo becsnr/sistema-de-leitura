@@ -16,20 +16,23 @@ addBook.addEventListener("click", () => {
         read: false
     };
 
-    fetch(`https://openlibrary.org/search.json?q=${book}`)
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=${book}`)
         .then(res => res.json())
         .then(dados => {
-            const bookAPI = dados.docs?.[0];
+            const bookAPI = dados.items?.[0]?.volumeInfo;
 
-            dadosBook.autor = bookAPI?.author_name?.[0] || "Autor desconhecido";
+            dadosBook.autor = bookAPI?.authors?.[0] || "Autor desconhecido";
 
-            dadosBook.capa = bookAPI?.cover_i ? `https://covers.openlibrary.org/b/id/${bookAPI.cover_i}-M.jpg` : null;
+            dadosBook.capa = bookAPI?.imageLinks?.thumbnail || null;
 
             storedBooks.push(dadosBook);
             localStorage.setItem("dados", JSON.stringify(storedBooks));
 
             renderizar();
             console.log(storedBooks);
+        })
+        .catch(() => {
+            alert("Livro não encontrado")
         });
 });
 
@@ -37,6 +40,23 @@ function criarCards(book, indice) {
     // criar o card
     const newCard = document.createElement('div');
     newCard.className = 'card';
+
+    // capa
+    const capa = document.createElement('div');
+    capa.className = 'capa';
+    const capaBook = document.createElement('img');
+    capaBook.className = 'img';
+
+    if (book.capa) {
+        capaBook.src = book.capa;
+        capaBook.alt = `Capa do livro ${book.title}`;
+    } else {
+        capaBook.alt = "Capa indisponível";
+    };
+
+    // informações do livro
+    const infoBook = document.createElement('div');
+    infoBook.className = 'info-book';
 
     // criar h2
     const titleBook = document.createElement('h2');
@@ -47,17 +67,6 @@ function criarCards(book, indice) {
     const autorBook = document.createElement('p');
     autorBook.className = 'autor-book';
     autorBook.textContent = book.autor;
-
-    // capa
-    const capaBook = document.createElement('img');
-    capaBook.className = 'capa';
-
-    if (book.capa) {
-        capaBook.src = book.capa;
-        capaBook.alt = `Capa do livro ${book.title}`;
-    } else {
-        capaBook.alt = "Capa indisponível";
-    }
     
     // botoes
     const concluirBtn = document.createElement('button');
@@ -88,11 +97,14 @@ function criarCards(book, indice) {
     };
 
     // coloca os novos elementos dentro do card
-    newCard.appendChild(capaBook);
-    newCard.appendChild(titleBook);
-    newCard.appendChild(autorBook);
-    newCard.appendChild(concluirBtn);
-    newCard.appendChild(removeBtn);
+    newCard.appendChild(capa);
+    capa.appendChild(capaBook);
+
+    newCard.appendChild(infoBook);
+    infoBook.appendChild(titleBook);
+    infoBook.appendChild(autorBook);
+    infoBook.appendChild(concluirBtn);
+    infoBook.appendChild(removeBtn);
 
     // coloca o card dentro da div
     divBooks.appendChild(newCard);
